@@ -147,3 +147,57 @@ Pagination.propTypes = {
 ```
 
 Adding type checking also adds documentation to props required in the app, their types, and if they are required or not.
+
+## Routing
+
+### Route component
+
+The `Route` component, is essentially a wrapper around the `component` parameter. When the url path matches the parameter in the path parameter, the props `history`, `location`, and `match` are passed to the component.
+
+This render method is an arrow function which takes the props (for `history`, `location`, and `match` as stated above) which are spread along with the `sortby` custom prop.
+
+Using the `exact` parameter in a Route tag will prevent the loading of a generic component when routing to a subpage. Alternatively, you can employ the `<Switch>` tag, and list the routes from most specific to most general as the `<Switch>` tag will match only one route.
+
+### Route parameters
+
+Below is a generic example for the using the Route component wrapper in React.
+
+```html
+<Route path="/posts" component={Posts} />
+```
+
+If custom props are required, you pass the `render` method instead of component.
+
+```html
+render={props => <Products sortby="newest" {...props} />}
+```
+
+## Query string
+
+A query string is appended to a url and looks like this:
+
+```html
+?sortBy=newest&approved=true
+```
+
+Using the `parse()` method query-string NPM package, we can extract the query string parameters from the URL to be used in our application logic.
+
+## Redirects
+
+Redirects can be used to handle invalid HTTP requests from an unknown URL, or to reroute the user from one site to one in the application.
+
+First, you declare the Route for the not found page:
+
+```html
+<Route path="/not-found" component={NotFound} />
+```
+
+and then set up the Redirect using react-router-dom, at the end of the Routes (i.e. if a user navigates to this URL, they have not successfully navigated to an existing route):
+
+```html
+<Redirect to="/not-found" />
+```
+
+### Programmatic Navigation
+
+The `history` prop contains several methods, `goBack()`,`goForward()`, `push()`, `replace()`, among others. The `replace()` method can be used to avoid a user navigating back to a page whereas the `push()` method will allow backward navigation.
