@@ -129,7 +129,7 @@ Counters - Rendered
 App - Mounted
 ```
 
-## Updating phase
+## **Updating phase**
 
 ## Pagination
 
@@ -201,3 +201,130 @@ and then set up the Redirect using react-router-dom, at the end of the Routes (i
 ### Programmatic Navigation
 
 The `history` prop contains several methods, `goBack()`,`goForward()`, `push()`, `replace()`, among others. The `replace()` method can be used to avoid a user navigating back to a page whereas the `push()` method will allow backward navigation.
+
+## Forms
+
+### Handling form submission
+
+To prevent a full page reload when submitting a form, use the `onSubmit` method in the `<form>` component, and prevent default in the method call like so:
+
+```js
+handleSubmit = e => {
+  e.preventDefault();
+};
+```
+
+```html
+ <form onSubmit={this.handleSubmit}>
+```
+
+### Refs
+
+To access a dom element, you create a ref using
+
+```js
+username = React.createRef();
+```
+
+Now, to access the username property, use the ref you created rather than accessing the DOM object directly.
+
+### Controlled Elements
+
+Just like controlled components, which obtain data through props and update the state through event handlers, controlled form elements work similarly.
+
+```html
+<form onSubmit={this.handleSubmit}>
+  <div className="form-group">
+    <label htmlFor="username">Username</label>
+    <input
+      onChange={this.handleInput}
+      value={account.username}
+      id="username"
+      name="username"
+      type="text"
+      className="form-control"
+    />
+```
+
+We set the `value` and `name` properties, and update our `state` object and `handleInput()` method to bind to these properties:
+
+```js
+state = {
+  account: { username: "", password: "" }
+};
+
+handleInput = ({ currentTarget: input }) => {
+  const account = { ...this.state.account };
+  account[input.name] = input.value;
+  this.setState({ account });
+};
+```
+
+NOTE: Initialize your inputs to an empty string, or a value obtained from the server to avoid a keyUp error for passing a value to an uncontrolled element.
+
+### Form validation
+
+We can add an `error` object in the `state`, and then add a `validate()` method like this:
+
+```js
+validate = () => {
+  const errors = {};
+  const { account } = this.state;
+  if (account.username.trim() === "") errors.username = "Username is required.";
+  if (account.password.trim() === "") errors.password = "Password is required.";
+  return Object.keys(errors).length === 0 ? null : errors;
+};
+```
+
+The object returned from this `validate()` method can be used in the `handleSubmit()` method to set the state:
+
+```js
+this.setState({ errors: errors || {} });
+```
+
+### Helper methods
+
+### Rest operator
+
+Our `input` module has several self-named parameters, namely `onChange={onChange}`, `type={type}`, and `value={value}`. We can simplify this code by using the rest operator in the object destructuring input to the Input stateless functional component.
+
+So,
+
+```js
+const Input = ({ name, label, value, error, onChange, type, value }) => {
+  return (
+    <div className="form-group">
+      <label htmlFor={name}>{label}</label>
+      <input onChange={onChange}
+        error={error}
+        value={value}
+        name={name}
+        id={name}
+        className="form-control" />
+      {error && <div className="alert alert-danger">{error}</div>}
+    </div>
+  );
+};
+```
+
+Becomes
+
+```js
+const Input = ({ name, label, value, error, ...rest }) => {
+  return (
+    <div className="form-group">
+      <label htmlFor={name}>{label}</label>
+      <input {...rest} name={name} id={name} className="form-control" />
+      {error && <div className="alert alert-danger">{error}</div>}
+    </div>
+  );
+};
+```
+
+### Conditional rendering
+
+```html
+{error && <div className="alert alert-danger">{ error }</div>}
+```
+
+This html tag is only rendered if the `error` property is truthy, i.e. if there is an error.
