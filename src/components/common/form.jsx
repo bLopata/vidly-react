@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
 import Input from "./input";
+import Select from "./select";
 
 class Form extends Component {
   state = {
@@ -21,6 +22,7 @@ class Form extends Component {
     if (!error) return null;
     const errors = {};
     for (let item of error.details) errors[item.path[0]] = item.message;
+    console.log(errors);
     return errors;
   };
 
@@ -63,21 +65,17 @@ class Form extends Component {
       />
     );
   }
-  renderDropdown(label) {
+  renderSelect(name, label, options) {
+    const { data, errors } = this.state;
     return (
-      <div className="input-group mb-3">
-        <div className="input-group-prepend">
-          <label className="input-group-text" htmlFor="inputGroupSelect01">
-            {label}
-          </label>
-        </div>
-        <select className="custom-select" id="inputGroupSelect01">
-          <option>Choose...</option>
-          <option value="1">Comedy</option>
-          <option value="2">Action</option>
-          <option value="3">Thriller</option>
-        </select>
-      </div>
+      <Select
+        name={name}
+        value={data[name]}
+        label={label}
+        options={options}
+        onChange={this.handleInput}
+        error={errors[name]}
+      />
     );
   }
 }
