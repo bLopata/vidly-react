@@ -6,12 +6,11 @@ import { getGenres } from "../services/fakeGenreService";
 
 class MovieForm extends Form {
   state = {
-    state: {
-      data: { title: "", genreId: "", numberInStock: "", dailyRentalRate: "" }
-    },
+    data: { title: "", genreId: "", numberInStock: "", dailyRentalRate: "" },
     genres: [],
     errors: {}
   };
+
   schema = {
     _id: Joi.string(),
     title: Joi.string()

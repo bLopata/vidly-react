@@ -1,8 +1,20 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {},
+  "extensions": {
+    "recommendations": [
+      "steoates.autoimport",
+      "nucllear.vscode-extension-auto-import",
+      "eamodio.gitlens",
+      "xabikos.javascriptsnippets",
+      "christian-kohler.npm-intellisense",
+      "christian-kohler.path-intellisense",
+      "esbenp.prettier-vscode",
+      "burkeholland.simple-react-snippets"
+    ]
+  }
 }
