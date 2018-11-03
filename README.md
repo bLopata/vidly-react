@@ -284,6 +284,8 @@ this.setState({ errors: errors || {} });
 
 ### Helper methods
 
+TODO: add helper methods
+
 ### Rest operator
 
 Our `input` module has several self-named parameters, namely `onChange={onChange}`, `type={type}`, and `value={value}`. We can simplify this code by using the rest operator in the object destructuring input to the Input stateless functional component.
@@ -328,3 +330,25 @@ const Input = ({ name, label, value, error, ...rest }) => {
 ```
 
 This html tag is only rendered if the `error` property is truthy, i.e. if there is an error.
+
+# Calling backend services
+
+## Lifecycle of a request
+
+## Pessimistic vs optimistic updates
+
+A pessimistic update is calling an http endpoint (and awaiting the response) before updating the UI, whereas optimistic updates update the UI first, and assume the http request will be successful. Wrapping the http request in a try catch block after copying the state, and then calling `this.setState()` with the copied state will allow the application to revert the change if an error occurs. Like so:
+
+```js
+handleDelete = async post => {
+  const originalPosts = this.state.posts;
+  const posts = this.state.posts.filter(p => p.id !== post.id);
+  this.setState({ posts });
+  try {
+    await axios.delete(apiEndpoint + "/" + post.id);
+  } catch (ex) {
+    alert("Something failed when deleting the post!");
+    this.setState({ posts: originalPosts });
+  }
+};
+```
