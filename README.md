@@ -284,7 +284,43 @@ this.setState({ errors: errors || {} });
 
 ### Helper methods
 
-TODO: add helper methods
+Helper methods are encapsulated in a common component, like a form, and called by the higher level component to render form elements:
+
+```js
+  renderInput(name, label, type = "text") {
+    const { data, errors } = this.state;
+```
+
+```html
+    return (
+      <Input
+        type={type}
+        name={name}
+        value={data[name]}
+        label={label}
+        onChange={this.handleInput}
+        error={errors[name]}
+      />
+    );
+  }
+```
+
+The data is passed via state, and the name, label, and type (defaulted to text) are passed via the method call.
+
+And, implementation in the `movieForm` component:
+
+```html
+ render() {
+    return (
+      <div>
+        <h1>Movie Form</h1>
+        <form onSubmit={this.handleSubmit}>
+          {this.renderInput("title", "Title")}
+        </form>
+      </div>
+    );
+  }
+```
 
 ### Rest operator
 
