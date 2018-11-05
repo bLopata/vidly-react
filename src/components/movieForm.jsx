@@ -6,7 +6,12 @@ import { getGenres } from "../services/genreService";
 
 class MovieForm extends Form {
   state = {
-    data: { title: "", genreId: "", numberInStock: "", dailyRentalRate: "" },
+    data: {
+      title: "",
+      genreId: "",
+      numberInStock: "",
+      dailyRentalRate: ""
+    },
     genres: [],
     errors: {}
   };
@@ -23,27 +28,29 @@ class MovieForm extends Form {
       .required()
       .min(0)
       .max(100)
-      .label("Number in stock"),
+      .label("Number in Stock"),
     dailyRentalRate: Joi.number()
       .required()
       .min(0)
       .max(10)
-      .label("Daily rental rate")
+      .label("Daily Rental Rate")
   };
 
   async populateGenres() {
     const { data: genres } = await getGenres();
     this.setState({ genres });
   }
+
   async populateMovie() {
     try {
       const movieId = this.props.match.params.id;
       if (movieId === "new") return;
+
       const { data: movie } = await getMovie(movieId);
       this.setState({ data: this.mapToViewModel(movie) });
     } catch (ex) {
-      console.log("Exception caught");
-      if (ex && ex.status === 404) this.props.history.replace("/not-found");
+      if (ex.response && ex.response.status === 404)
+        this.props.history.replace("/not-found");
     }
   }
 
@@ -62,20 +69,20 @@ class MovieForm extends Form {
     };
   }
 
-  async doSubmit() {
+  doSubmit = async () => {
     await saveMovie(this.state.data);
+
     this.props.history.push("/movies");
-  }
+  };
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <h1>Movie Form</h1>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "Title")}
           {this.renderSelect("genreId", "Genre", this.state.genres)}
-          {this.renderInput("numberInStock", "Number in stock")}
+          {this.renderInput("numberInStock", "Number in Stock", "number")}
           {this.renderInput("dailyRentalRate", "Rate")}
           {this.renderButton("Save")}
         </form>
@@ -83,4 +90,5 @@ class MovieForm extends Form {
     );
   }
 }
+
 export default MovieForm;
