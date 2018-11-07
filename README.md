@@ -118,16 +118,7 @@ This method is called once after the component is mounted in the DOM. This is th
 
 ### Render
 
-`render()` is called when React renders the object returned from the VirtualDOM in the ReactDOM, after which the component is mounted - or contained within the React DOM. When a component is rendered, all of the children are rendered recursively. The output of our App in the console is as follows:
-
-```
-App - Constructor
-App - Rendered
-NavBar - Rendered
-Counters - Rendered
-(5)Counter - Rendered
-App - Mounted
-```
+`render()` is called when React renders the object returned from the VirtualDOM in the ReactDOM, after which the component is mounted - or contained within the React DOM. When a component is rendered, all of the children are rendered recursively.
 
 ## **Updating phase**
 
@@ -192,7 +183,7 @@ First, you declare the Route for the not found page:
 <Route path="/not-found" component={NotFound} />
 ```
 
-and then set up the Redirect using react-router-dom, at the end of the Routes (i.e. if a user navigates to this URL, they have not successfully navigated to an existing route):
+and then set up the Redirect using react-router-dom, at the end of the Routes (when a user navigates to a URL, this URL is checked against the routes specified in sequential order. Putting the not-found URL last ensures that the user is redirected here only if the URL entered does not match an existing route.):
 
 ```html
 <Redirect to="/not-found" />
